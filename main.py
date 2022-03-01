@@ -1,3 +1,4 @@
+import parser
 from tkinter import *
 root=Tk()
 root.title("Calculator")
@@ -24,8 +25,22 @@ def undo():
         clear_all()
         display.insert(0,"Error")
 
+def get_operations(opr):
+    global i
+    length=len(opr)
+    display.insert(i,opr)
+    i+=length
 
-
+def calculate():
+    enter_string=display.get()
+    try:
+        a=parser.expr(enter_string).compile()
+        result=eval(a)
+        clear_all()
+        display.insert(0,result)
+    except Exception:
+        clear_all()
+        display.insert(0,"Error")
 
 
 Button(root,text="1",command=lambda :get_variable(1)).grid(row=2,column=0)
@@ -39,18 +54,18 @@ Button(root,text="8",command=lambda :get_variable(8)).grid(row=4,column=1)
 Button(root,text="9",command=lambda :get_variable(9)).grid(row=4,column=2)
 Button(root,text="0",command=lambda :get_variable(0)).grid(row=5,column=0)
 Button(root,text="AC",command=lambda :clear_all()).grid(row=5,column=1)
-Button(root,text="->",command=lambda :undo()).grid(row=5,column=2)
-Button(root,text="=").grid(row=2,column=3)
-Button(root,text="+").grid(row=3,column=3)
-Button(root,text="-").grid(row=4,column=3)
-Button(root,text="*").grid(row=5,column=3)
-Button(root,text="/").grid(row=2,column=4)
-Button(root,text="PI").grid(row=3,column=4)
-Button(root,text="%").grid(row=4,column=4)
-Button(root,text="(").grid(row=5,column=4)
-Button(root,text=")").grid(row=2,column=5)
-Button(root,text="exp").grid(row=3,column=5)
+Button(root,text="del",command=lambda :undo()).grid(row=5,column=2)
+Button(root,text="=",command=lambda :calculate()).grid(row=2,column=3)
+Button(root,text="+",command=lambda :get_operations('+')).grid(row=3,column=3)
+Button(root,text="-",command=lambda :get_operations('-')).grid(row=4,column=3)
+Button(root,text="*",command=lambda :get_operations('*')).grid(row=5,column=3)
+Button(root,text="/",command=lambda :get_operations('/')).grid(row=2,column=4)
+Button(root,text="PI",command=lambda :get_operations('*3.14')).grid(row=3,column=4)
+Button(root,text="%",command=lambda :get_operations('%')).grid(row=4,column=4)
+Button(root,text="(",command=lambda :get_operations('(')).grid(row=5,column=4)
+Button(root,text=")",command=lambda :get_operations(')')).grid(row=2,column=5)
+Button(root,text="exp",command=lambda :get_operations('**')).grid(row=3,column=5)
 Button(root,text="x!").grid(row=4,column=5)
-Button(root,text="^2").grid(row=5,column=5)
+Button(root,text="^2",command=lambda :get_operations('**2')).grid(row=5,column=5)
 
 root.mainloop()
